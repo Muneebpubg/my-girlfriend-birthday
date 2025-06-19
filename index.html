@@ -3,119 +3,180 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Happy Birthday My Moon</title>
+  <title>Happy Birthday, My Moon</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Josefin+Sans:wght@300&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Sacramento&family=Josefin+Sans:wght@300;400&display=swap');
 
+    /* — Reset & Body — */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      padding: 0;
       background: linear-gradient(to top, #0f0c29, #302b63, #24243e);
-      font-family: 'Josefin Sans', sans-serif;
       color: #fff;
-      overflow-x: hidden;
+      font-family: 'Josefin Sans', sans-serif;
+      overflow: hidden;
       position: relative;
+      height: 100vh;
     }
 
+    /* — Stars Background — */
+    .stars {
+      position: absolute; width: 100%; height: 100%;
+      background: url('https://i.ibb.co/W0wZ1zL/stars.gif') repeat;
+      opacity: 0.5; z-index: -2;
+    }
+
+    /* — Floating Hearts — */
+    .heart {
+      position: absolute; bottom: -50px;
+      width: 30px; height: 30px;
+      background: url('https://i.ibb.co/YZgdbs7/heart.png') no-repeat center/contain;
+      animation: floatHeart 6s linear infinite;
+      opacity: 0.8;
+    }
+    @keyframes floatHeart {
+      0% { transform: translateY(0) scale(0.8); opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+    }
+
+    /* — Container & Headings — */
     .container {
       text-align: center;
-      padding: 3rem 1rem;
-      animation: fadeIn 2s ease;
+      padding: 2rem 1rem;
+      position: relative;
+      z-index: 1;
     }
-
     h1 {
       font-family: 'Sacramento', cursive;
-      font-size: 3rem;
-      margin-bottom: 0.5rem;
+      font-size: 3.5rem;
       color: #ffd6ff;
       text-shadow: 0 0 10px #ff00cc;
+      animation: glowText 2s ease-in-out infinite alternate;
+    }
+    @keyframes glowText {
+      from { text-shadow: 0 0 5px #ff69b4; }
+      to   { text-shadow: 0 0 20px #ff1493; }
     }
 
-    p {
-      font-size: 1.2rem;
-      margin: 1rem auto;
-      max-width: 700px;
-      color: #f5e6ff;
-      text-shadow: 0 0 4px #aa66cc;
+    /* — Gift Box — */
+    .gift-box {
+      width: 150px; margin: 2rem auto;
+      cursor: pointer; position: relative;
+      transition: transform 0.3s;
+    }
+    .gift-box:hover { transform: scale(1.1); }
+    .gift-box img { width: 100%; display: block; }
+
+    /* — Reveal Surprise — */
+    .surprise {
+      display: none;
+      margin-top: 1rem;
+      animation: fadeIn 1s ease forwards;
     }
 
-    .cake {
-      margin-top: 2rem;
-    }
-
-    .cake img {
-      width: 200px;
-      animation: float 4s ease-in-out infinite;
-      filter: drop-shadow(0 0 20px #ff69b4);
-    }
-
+    /* — Voice Button — */
     .audio-btn {
-      margin: 2rem auto;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 20px;
-      background: #ffb6c1;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 10px #ff69b4;
+      margin: 1.5rem auto;
+      padding: 0.8rem 1.5rem;
+      border: none; border-radius: 20px;
+      background: #ffb6c1; color: #fff;
+      font-size: 1rem; font-weight: bold;
+      cursor: pointer; box-shadow: 0 0 10px #ff69b4;
       transition: background 0.3s;
     }
+    .audio-btn:hover { background: #ff69b4; }
 
-    .audio-btn:hover {
-      background: #ff69b4;
+    /* — Countdown — */
+    .countdown {
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
     }
-
-    .quote {
-      margin-top: 3rem;
-      font-style: italic;
-      font-size: 1.1rem;
-      color: #d4bfff;
-      text-shadow: 0 0 5px #9966ff;
-    }
-
-    .stars {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: transparent url('https://i.ibb.co/W0wZ1zL/stars.gif') repeat top center;
-      z-index: -1;
-      opacity: 0.5;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
-    }
+    .countdown span { display: inline-block; min-width: 50px; }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
   </style>
 </head>
 <body>
-  <div class="stars"></div>
-  <div class="container">
-    <h1>Happy Birthday, My Moon ✨</h1>
-    <p>
-      From the moment we met, you've brightened my skies like stars in the night.  
-      No distance can dim the warmth I feel for you today.  
-      This little space is a piece of my heart, made just for you.
-    </p>
 
-    <div class="cake">
-      <img src="https://i.ibb.co/YZgdbs7/birthdaycake.png" alt="Digital Cake"/>
+  <div class="stars"></div>
+
+  <!-- Floating hearts -->
+  <script>
+    const heartCount = 8;
+    for (let i = 0; i < heartCount; i++) {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.style.left = Math.random() * 100 + 'vw';
+      h.style.animationDelay = Math.random() * 6 + 's';
+      h.style.animationDuration = 4 + Math.random() * 4 + 's';
+      document.body.appendChild(h);
+    }
+  </script>
+
+  <div class="container">
+    <h1>Happy Birthday, <span id="nick">My Moon</span> ✨</h1>
+    <p>Your light guides me through every night. Distance means so little when someone means so much.</p>
+
+    <!-- Gift Box -->
+    <div class="gift-box" id="gift">
+      <img src="https://i.ibb.co/3sK6G5M/closed-box.png" alt="Gift Box" id="box-img">
+    </div>
+    <div class="surprise" id="surprise">
+      <img src="https://i.ibb.co/YZgdbs7/birthdaycake.png" alt="Cake" width="200"/>
+      <p>Surprise! 🎂 I love you more than all the stars combined!</p>
     </div>
 
-    <button class="audio-btn" onclick="document.getElementById('voice').play()">💌 Click to Hear a Voice Note</button>
-    <audio id="voice" src="your-voice-note.mp3"></audio>
+    <!-- Voice Note -->
+    <button class="audio-btn" onclick="document.getElementById('voice').play()">
+      💌 Click to Hear Your Voice Note
+    </button>
+    <audio id="voice" src="voice.mp3"></audio>
 
-    <div class="quote">
-      <p>"May this year bless you with endless joy, success, and our love growing deeper."</p>
-      <p>🤍 Ameen 🤍</p>
+    <!-- Countdown Timer -->
+    <div class="countdown" id="countdown">
+      <span id="days">00</span>d :
+      <span id="hours">00</span>h :
+      <span id="mins">00</span>m :
+      <span id="secs">00</span>s
     </div>
   </div>
+
+  <script>
+    // Gift box click → reveal
+    document.getElementById('gift').onclick = () => {
+      document.getElementById('box-img').src = 'https://i.ibb.co/1Qp8m1v/open-box.png';
+      document.getElementById('surprise').style.display = 'block';
+    };
+
+    // Countdown script
+    // 👉 Set your target date/time here:
+    const target = new Date('2025-12-31T00:00:00').getTime();
+
+    function updateCountdown() {
+      const now = Date.now();
+      const diff = target - now;
+      if (diff <= 0) {
+        document.getElementById('countdown').textContent = "🎉 It's here! 🎉";
+        clearInterval(timerInterval);
+        return;
+      }
+      const d = Math.floor(diff / (1000*60*60*24));
+      const h = Math.floor((diff / (1000*60*60)) % 24);
+      const m = Math.floor((diff / (1000*60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      document.getElementById('days').textContent = String(d).padStart(2,'0');
+      document.getElementById('hours').textContent = String(h).padStart(2,'0');
+      document.getElementById('mins').textContent = String(m).padStart(2,'0');
+      document.getElementById('secs').textContent = String(s).padStart(2,'0');
+    }
+
+    const timerInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+
 </body>
 </html>
